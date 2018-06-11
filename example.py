@@ -7,11 +7,7 @@ def cb_process_data(data):
     print("processing dummy.. {}".format(data))
 
 def cb_send_data():
-    num = 1
-    while True:
-        asyncio.sleep(10)
-        num = num + 1
-        return str(num)
+    pass
     
-my_gossip = Gossip(cb_process_data, cb_send_data)
+my_gossip = Gossip("seeds.txt", cb_process_data, cb_send_data)
 my_gossip.start()

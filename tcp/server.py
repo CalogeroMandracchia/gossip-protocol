@@ -27,10 +27,11 @@ class Server(asyncio.Protocol):
     def data_received(self, data):
         try:
             data = json.loads(data.decode())
+            self.log.debug('{}:{} sent -{}-'.format(*self.address, data))
             #TODO is ip banned? -> self.connection_lost("IP is banned")
             res = is_cmd_incoming_protocol(data["cmd"])
             if res != None: # so it is a command 
-                self.transport.write(res)
+                self.transport.write(str.encode(res))
             else: # it is not a command
                 self.queue.put(data, block=False)
                 self.log.debug('{}:{} just sent {!r}'.format(*self.address, data))
@@ -45,6 +46,6 @@ class Server(asyncio.Protocol):
     def eof_received(self):
         self.log.debug('{}:{} sent EOF'.format(*self.address))
 
-    def connection_lost(self):
+    def connection_lost(self, error=""):
         self.log.debug('{}:{} disconnected'.format(*self.address))
         self.transport.close()

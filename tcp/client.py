@@ -34,7 +34,9 @@ class Client(asyncio.Protocol):
             if res == True:
                 pass
             else:
-                self.transport.write(res)
+                #TODO this point should never ne reached
+                self.log.debug('{}:{} something went wrong: {}'.format(*self.address, res))
+                self.transport.write(str.encode(res))
         except json.decoder.JSONDecodeError as exc:
             self.log.debug('{}:{} sent malformed data: {}'.format(*self.address, data))
             self.ban()

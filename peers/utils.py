@@ -14,3 +14,4 @@ def get_list_seeds():
         #TODO remove 127.0.0.1
     return list_peers.split("|")
 
+    #TODO empty banned once in a while

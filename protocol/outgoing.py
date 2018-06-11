@@ -2,6 +2,7 @@ import json
 from peers.utils import get_list_peers, write_peers
 
 def getaddr():
+    print("preparing getaddr for asking")
     message = json.dumps({"cmd": "getaddr"})
     return message
 
