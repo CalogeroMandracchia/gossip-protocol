@@ -23,15 +23,15 @@ async def discovery_peers():
         to_be_filtered = set(seeds + peers)
         list_people_ill_ask = list(filter(None, to_be_filtered))
         #TODO if you don't have enough peers, consider taking it from the known.txt
-        loop = asyncio.get_event_loop()
         for peer in list_people_ill_ask:
+            loop = asyncio.get_event_loop()
             log.debug("-{}- im going to try to connect now".format(peer))
             coro = loop.create_connection(lambda: Client(), peer, 3338)
-            _, proto = await coro
+            _, protocol = await coro
             #TODO ask addresses
             log.debug("i'm sending to -{}- this: -{}-".format(peer, getaddr()))
-            proto.transport.write(str.encode(getaddr()))
-            proto.transport.close()
+            protocol.transport.write(str.encode(getaddr()))
+            protocol.transport.close()
     except ConnectionRefusedError as exc:
         #TODO better logs with name of error
         log.debug("{}: {}".format(peer, exc))

@@ -4,6 +4,7 @@ import sys
 import json
 
 from protocol.incoming import is_cmd_incoming_protocol
+from peers.utils import append_peer
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -22,7 +23,8 @@ class Server(asyncio.Protocol):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
         self.log.debug('{}:{} connected'.format(*self.address))
-        #TODO add in the known list
+        append_peer(self.address[0])
+        #TODO add in the known list, remove append, implement ping pong and add it
 
     def data_received(self, data):
         try:
@@ -30,6 +32,7 @@ class Server(asyncio.Protocol):
             self.log.debug('{}:{} sent -{}-'.format(*self.address, data))
             #TODO is ip banned? -> self.connection_lost("IP is banned")
             res = is_cmd_incoming_protocol(data["cmd"])
+            self.log.debug('res is: -{}-'.format(res))
             if res != None: # so it is a command 
                 self.transport.write(str.encode(res))
             else: # it is not a command
@@ -38,6 +41,7 @@ class Server(asyncio.Protocol):
 
         except json.decoder.JSONDecodeError as exc:
             self.log.debug('{}:{} sent malformed data: {}'.format(*self.address, data))
+            self.ban()
         except Exception as exc:
             self.log.debug('{}:{} unexpected error! PLEASE report this on https://github.com/CalogeroMandracchia/gossip-protocol/issues : {}'.format(*self.address, exc))
         finally:
@@ -48,4 +52,10 @@ class Server(asyncio.Protocol):
 
     def connection_lost(self, error=""):
         self.log.debug('{}:{} disconnected'.format(*self.address))
+        self.transport.close()
+
+    def ban(self):
+        #TODO implement
+        #self.address[0]
+        self.log.debug('{}:{} will be banned'.format(*self.address))
         self.transport.close()

@@ -32,8 +32,8 @@ async def send_data(data):
     try:
         peers = get_list_peers()
         #TODO if you don't have enough peers, consider taking it from the known.txt
-        loop = asyncio.get_event_loop()
         for peer in peers:
+            loop = asyncio.get_event_loop()
             log.debug("-{}- im sending data -{}-..".format(peer, data))
             coro = loop.create_connection(lambda: Client(), peer, 3338)
             _, protocol = await coro

@@ -1,7 +1,4 @@
-import asyncio
 from gossip import Gossip
-
-
 
 def cb_process_data(data):
     print("processing dummy.. {}".format(data))

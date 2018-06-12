@@ -46,7 +46,7 @@ def create_seeds(log, data, seeds_namefile = "./peers/seeds.txt"):
         log.debug("seeds file '{}' created".format(seeds_namefile))
 
 def start_server(log, loop, queue, serverport):
-    server_address = ('localhost', serverport)
+    server_address = ('192.168.1.2', serverport)
     coro_server = loop.create_server(lambda: Server(queue), *server_address)
     server = loop.run_until_complete(coro_server)
     log.debug('Serving on {}:{}'.format(*server.sockets[0].getsockname()))

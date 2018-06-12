@@ -3,7 +3,9 @@ from peers.utils import get_list_peers, write_peers
 
 def addr():
     list_peers = get_list_peers()
-    message = json.dumps({"cmd": "addr", "data": list_peers})
+    eliminate_dup = set(list(filter(None, list_peers)))
+    truncate_peers = list(eliminate_dup)[-30:]
+    message = json.dumps({"cmd": "addr", "data": truncate_peers})
     return message
 
 def verify_addr(new_peers):
