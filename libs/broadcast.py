@@ -18,7 +18,7 @@ log = logging.getLogger('broadcast')
 async def broadcast(q):
     while True:
         try:
-            await asyncio.sleep(1)
+            await asyncio.sleep(10)
             data = q.get(block=False)
             q.task_done()
             #TODO why data is already bytes?
@@ -38,7 +38,7 @@ async def send_data(data):
             coro = loop.create_connection(lambda: Client(), peer, 3338)
             _, protocol = await coro
             protocol.transport.write(data.encode(data))
-            protocol.transport.close()
+            #protocol.transport.close()
     except ConnectionRefusedError as exc:
         #TODO better logs with name of error
         log.debug("{}: {}".format(peer, exc))

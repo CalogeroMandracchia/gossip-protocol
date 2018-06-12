@@ -26,7 +26,7 @@ class Client(asyncio.Protocol):
     def data_received(self, data):
         try:
             data = json.loads(data.decode())
-            self.log.debug('{}:{} just sent {!r}'.format(*self.address, data))
+            self.log.debug('I just received from {}:{} this: {}'.format(*self.address, data))
             #TODO is ip banned? -> self.connection_lost() "IP is banned"
             res = is_cmd_outgoing_protocol(data)
             if res == False:
@@ -51,10 +51,11 @@ class Client(asyncio.Protocol):
  
 
     def eof_received(self):
-        self.log.debug('{}:{} sent EOF'.format(*self.address))
+        pass
+        #self.log.debug('{}:{} sent EOF'.format(*self.address))
 
     def connection_lost(self, error=""):
-        self.log.debug('{}:{} disconnected'.format(*self.address))
+        #self.log.debug('{}:{} disconnected'.format(*self.address))
         self.transport.close()
 
     def ban(self):
