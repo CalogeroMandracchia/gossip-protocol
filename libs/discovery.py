@@ -16,6 +16,7 @@ log = logging.getLogger('discovery')
 
 async def discovery_peers():
     try:
+        log.debug("start discovering peers")
         #TODO solve the big problem of dying in 5 minutes
         seeds = get_list_seeds()
         peers = get_list_peers()

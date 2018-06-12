@@ -13,7 +13,7 @@ def get_seeds(log, seeds_file):
         log.debug(err_message)
         raise IOError(err_message)
     log.debug("seeds read: " + ''.join(list_seeds))
-    return list_seeds
+    return list_seeds.split("|")
 
 def create_peers(log, peers_namefile = "./peers/peers.txt"):
     if isfile(peers_namefile):
@@ -22,7 +22,7 @@ def create_peers(log, peers_namefile = "./peers/peers.txt"):
         open(peers_namefile, "w+")
         log.debug("peers file '{}' created".format(peers_namefile))
 
-def create_known(log, known_namefile = "./peers/peers.txt"):
+def create_known(log, known_namefile = "./peers/known.txt"):
     if isfile(known_namefile):
         log.debug("known file '{}' found".format(known_namefile))
     else: 
@@ -37,10 +37,13 @@ def create_banned(log, banned_namefile = "./peers/banned.txt"):
         log.debug("banned file '{}' created".format(banned_namefile))
 
 def create_seeds(log, data, seeds_namefile = "./peers/seeds.txt"):
-    #TODO ma li scrive sti seeds??
-    with open(seeds_namefile, "w") as f:
-        f.write(data.join("|"))
-    log.debug("seeds file '{}' created".format(seeds_namefile))
+    
+    if isfile(seeds_namefile):
+        log.debug("seeds file '{}' found".format(seeds_namefile))
+    else: 
+        with open(seeds_namefile, "w+") as f:
+            f.write('|'.join(data))
+        log.debug("seeds file '{}' created".format(seeds_namefile))
 
 def start_server(log, loop, queue, serverport):
     server_address = ('localhost', serverport)
